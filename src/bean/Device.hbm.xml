@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<class name="bean.Device" table="DEVICE">
+		<id name="did" column="DID" type="java.lang.String">
+			<generator class="assigned"/>
+		</id>
+		<property name="dname" column="DNAME" type="java.lang.String"/>
+		<property name="state" column="STATE" type="java.lang.String"/>
+		<property name="pn" column="PN" type="java.lang.String"/>
+		<property name="hn" column="HN" type="java.lang.String"/>
+		<property name="h_version" column="H_VERSION" type="java.lang.String"/>
+		<property name="s_version" column="S_VERSION" type="java.lang.String"/>
+		<!-- 先配置多方 
+			name	当前JavaBean中的属性
+			class	属性的全路径
+			column	外键的字段
+		-->
+		<many-to-one name="pond" class="bean.Pond" column="PID" cascade="save-update,delete" lazy="false" fetch="join"/>
+		<many-to-one name="type" class="bean.DeviceType" column="TID" cascade="save-update,delete" lazy="false" fetch="join"/>
+	</class>
+	
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="bean.DeviceType" table="DEVICE_TYPE">
+        <id name="typeId" column="TID" type="java.lang.String">
+            <generator class="uuid"/>
+        </id>
+        <property name="typeName" column="TNAME" type="java.lang.String"/>
+        <many-to-one name="param" class="bean.Param" column="PID" cascade="save-update,delete" lazy="false" fetch="join"/>
+    </class>
+
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+

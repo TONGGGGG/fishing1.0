@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="fishing1.0:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="esearch.war">
+      <element id="artifact" artifact-name="fishing1.0:war exploded" />
+    </root>
+  </artifact>
+</component>

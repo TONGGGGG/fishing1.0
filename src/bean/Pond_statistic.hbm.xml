@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="bean.Pond_statistic" table="POND_STATISTICS">
+        <composite-id>
+            <key-property name="type" column="TYPE" type="java.lang.String"/>
+            <key-property name="time" column="TIME" type="java.lang.String"/>
+            <key-property name="value" column="VALUE" type="java.lang.String"/>
+        </composite-id>
+
+        <many-to-one name="pond" class="bean.Pond" column="PID"  />
+        <many-to-one name="param" class="bean.Param" column="PARAM_ID"  />
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE hibernate-mapping PUBLIC
+                "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="bean.Creature" table="CREATURE"  lazy="false">
+    <id name="cid" column="CID" type="string">
+        <generator class="uuid"/>
+    </id>
+    <property name="cname" column="CNAME" type="string"/>
+
+    <set name="cre_params" table="CRE_PARAM" lazy="false" fetch="join">
+        <key column="CID"/>
+        <one-to-many class="bean.Cre_param" />
+    </set>
+</class>
+</hibernate-mapping>

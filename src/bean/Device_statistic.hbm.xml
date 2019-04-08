@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="bean.Device_statistic" table="DEVICE_STATISTICS">
+        <composite-id>
+            <key-property name="type" column="TYPE" type="java.lang.String"/>
+            <key-property name="time" column="TIME" type="java.lang.String"/>
+            <key-property name="value" column="VALUE" type="java.lang.String"/>
+        </composite-id>
+
+        <many-to-one name="device" class="bean.Device" column="DID" cascade="save-update,delete" />
+        <many-to-one name="param" class="bean.Param" column="PARAM_ID" cascade="save-update,delete" />
+    </class>
+</hibernate-mapping>

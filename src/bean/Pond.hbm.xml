@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="bean.Pond" table="POND" >
+        <id name="pid" column="PID" type="string">
+            <generator class="uuid"/>
+        </id>
+        <property name="pname" column="PNAME" type="string"/>
+        <property name="area" column="AREA" type="java.lang.Double"/>
+        <property name="deep" column="DEEP" type="java.lang.Double"/>
+        <property name="texture" column="TEXTURE" type="string"/>
+        <property name="mode" column="MODE" type="string"/>
+        <!--<property name="p00" column="P00" type="java.lang.Double"/>-->
+        <!--<property name="p01" column="P01" type="java.lang.Double"/>-->
+        <!--<property name="p10" column="P10" type="java.lang.Double"/>-->
+        <!--<property name="p11" column="P11" type="java.lang.Double"/>-->
+        <!--<property name="p20" column="P20" type="java.lang.Double"/>-->
+        <!--<property name="p21" column="P21" type="java.lang.Double"/>-->
+        <!--<property name="p30" column="P30" type="java.lang.Double"/>-->
+        <!--<property name="p31" column="P31" type="java.lang.Double"/>-->
+        <many-to-one name="user" class="bean.User" column="UIDS" cascade="save-update,delete" lazy="false" fetch="join"/>
+        <many-to-one name="creature" class="bean.Creature" column="CID" cascade="save-update,delete" lazy="false" fetch="join"/>
+
+        <set name="devices" table="DEVICE" lazy="false" fetch="join">
+            <key column="PID"/>
+            <one-to-many class="bean.Device" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd"
+        default-autowire="byName"
+>
+
+    <!-- 启动时扫描所有的controller -->
+    <context:component-scan base-package="web" />
+
+    <!-- 扫描DAO包 自动创建实现 -->
+    <context:component-scan base-package="dao" />
+
+    <!-- 扫描Service包 -->
+    <context:component-scan base-package="service" />
+
+    <!-- 扫描correspondence包 -->
+    <context:component-scan base-package="correspondence" />
+
+    <!-- 扫描统计包 -->
+    <context:component-scan base-package="statistic" />
+
+    <!-- 扫描定时任务包 -->
+    <context:component-scan base-package="inteltask" />
+
+    <!-- 扫描工具包 -->
+    <context:component-scan base-package="util" />
+
+    <!-- 扫描监听器包 -->
+    <context:component-scan base-package="listener" />
+
+    <!--&lt;!&ndash; Spring task定时配置 &ndash;&gt;-->
+    <!--<task:scheduled-tasks>-->
+        <!--&lt;!&ndash; 每15秒执行一次，此处可设置为以指定时间间隔或者指定的时间执行，具体由cron表达式决定 &ndash;&gt;-->
+        <!--<task:scheduled ref="intelTask" method="todayTask" cron="0 0/2 * * * ?"/>-->
+    <!--</task:scheduled-tasks>-->
+
+
+
+    <!-- jsp页面解析器，当Controller返回XXX字符串时，先通过拦截器，然后该类就会在/WEB-INF/views/目录下，查找XXX.jsp文件 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://localhost:3306/fishing?characterEncoding=UTF-8</value>
+        </property>
+        <property name="username">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>123</value>
+        </property>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+        <property name="mappingDirectoryLocations">
+            <list>
+                <value>classpath:bean/</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--配置Hibernate的事务管理器类-->
+    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+
+        <!--引用的是SessionFactory，SessionFactory包括了数据连接池-->
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!--开启以注解的方式来管理事务-->
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+
+
+    <context:property-placeholder location="META-INF/redis.properties"/>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:pool-config-ref="poolConfig"/>
+
+    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+    </bean>
+
+</beans>
